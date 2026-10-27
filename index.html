@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InfinityWeb AI</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #080b16;
+  color: white;
+  min-height: 100vh;
+}
+
+header {
+  padding: 25px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #242a40;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #a78bfa, #22d3ee);
+  color: transparent;
+  background-clip: text;
+}
+
+.badge {
+  color: #63f5b5;
+  font-size: 12px;
+}
+
+.hero {
+  text-align: center;
+  padding: 65px 20px 35px;
+  animation: appear 1s ease;
+}
+
+.hero h1 {
+  font-size: clamp(38px, 6vw, 65px);
+  margin-bottom: 20px;
+}
+
+.gradient {
+  background: linear-gradient(90deg, #a78bfa, #22d3ee);
+  color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  color: #a5aec8;
+  line-height: 1.8;
+  max-width: 650px;
+  margin: auto;
+}
+
+.container {
+  max-width: 1250px;
+  margin: 20px auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 20px;
+}
+
+.panel {
+  background: #111626;
+  border: 1px solid #29314b;
+  border-radius: 18px;
+  padding: 23px;
+  animation: appear .8s ease;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 22px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #c8d0e8;
+}
+
+textarea, select {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #343d59;
+  background: #090d19;
+  color: white;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+textarea {
+  min-height: 180px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+textarea:focus, select:focus {
+  border-color: #a78bfa;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-weight: bold;
+  transition: .25s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}
+
+.generate {
+  width: 100%;
+  background: linear-gradient(90deg, #a78bfa, #22d3ee);
+  color: #090b16;
+  font-size: 15px;
+}
+
+.small-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.small-buttons button, .secondary {
+  background: #1a2033;
+  color: #dce4ff;
+  border: 1px solid #343d59;
+  font-size: 12px;
+}
+
+.workspace {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.toolbar button.active {
+  background: #a78bfa;
+  color: #090b16;
+}
+
+#preview {
+  width: 100%;
+  height: 500px;
+  background: white;
+  border: none;
+  border-radius: 12px;
+}
+
+#code {
+  display: none;
+  width: 100%;
+  height: 500px;
+  overflow: auto;
+  white-space: pre;
+  background: #080b13;
+  color: #a5f3fc;
+  padding: 18px;
+  font: 12px/1.7 monospace;
+  border-radius: 12px;
+}
+
+footer {
+  text-align: center;
+  color: #818ba7;
+  padding: 30px 15px;
+  font-size: 12px;
+}
+
+#toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222b42;
+  border: 1px solid #475577;
+  padding: 12px 18px;
+  border-radius: 10px;
+  display: none;
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media(max-width:850px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media(max-width:500px) {
+  header { padding: 20px; }
+  .hero { padding-top: 45px; }
+  .container { padding: 12px; }
+  #preview, #code { height: 400px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✦ InfinityWeb AI</div>
+  <div class="badge">● STUDIO READY</div>
+</header>
+
+<section class="hero">
+  <h1>Dream it. <span class="gradient">Build it.</span></h1>
+  <p>
+    Turn your ideas into beautiful websites.
+    Preview your creations, explore the source code,
+    and download your work without publishing it.
+  </p>
+</section>
+
+<main class="container">
+
+  <section class="panel">
+    <h2>✦ Create your website</h2>
+
+    <label for="idea">Describe your idea</label>
+
+    <textarea id="idea"
+      placeholder="Example: Create a futuristic gaming website with animations, game cards, neon colors and a contact section..."></textarea>
+
+    <label for="style">Choose a design</label>
+
+    <select id="style">
+      <option value="modern">Modern</option>
+      <option value="neon">Neon futuristic</option>
+      <option value="playful">Colorful</option>
+      <option value="elegant">Premium</option>
+      <option value="nature">Nature</option>
+    </select>
+
+    <label>Quick ideas</label>
+
+    <div class="small-buttons">
+      <button onclick="setIdea('Create a personal portfolio website')">Portfolio</button>
+      <button onclick="setIdea('Create an online shopping website')">Store</button>
+      <button onclick="setIdea('Create a futuristic AI startup website')">AI startup</button>
+      <button onclick="setIdea('Create a gaming community website')">Gaming</button>
+      <button onclick="setIdea('Create a student study dashboard')">Study</button>
+    </div>
+
+    <button class="generate" id="generate" onclick="generateWebsite()">
+      ✨ Generate Website
+    </button>
+
+    <p style="color:#858fab;font-size:11px;text-align:center;margin-top:15px">
+      Free prototype · No login · No auto-publishing
+    </p>
+  </section>
+
+  <section class="panel workspace">
+    <h2>Website workspace</h2>
+
+    <div class="toolbar">
+      <button class="secondary active" id="previewTab"
+        onclick="showView('preview')">Preview</button>
+
+      <button class="secondary" id="htmlTab"
+        onclick="showView('html')">HTML</button>
+
+      <button class="secondary" id="cssTab"
+        onclick="showView('css')">CSS</button>
+
+      <button class="secondary" id="jsTab"
+        onclick="showView('js')">JavaScript</button>
+
+      <button class="secondary" onclick="copyCode()">Copy code</button>
+
+      <button class="secondary" onclick="downloadCode()">Download</button>
+    </div>
+
+    <iframe id="preview" title="Website preview"
+      sandbox="allow-scripts"></iframe>
+
+    <pre id="code"></pre>
+  </section>
+
+</main>
+
+<footer>
+  InfinityWeb AI · Imagine anything. Create something amazing. ✦
+</footer>
+
+<div id="toast"></div>
+
+<script>
+let website = { html: "", css: "", js: "" };
+let currentView = "preview";
+let soundEnabled = false;
+let audioContext;
+
+function setIdea(text) {
+  document.getElementById("idea").value = text;
+  playSound(500);
+}
+
+function playSound(frequency = 550) {
+  if (!soundEnabled) return;
+
+  try {
+    audioContext = audioContext ||
+      new (window.AudioContext || window.webkitAudioContext)();
+
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.frequency.value = frequency;
+    gain.gain.value = 0.025;
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+    gain.gain.exponentialRampToValueAtTime(
+      0.001, audioContext.currentTime + 0.12
+    );
+    oscillator.stop(audioContext.currentTime + 0.12);
+  } catch (error) {}
+}
+
+function notify(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.style.display = "block";
+
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 2300);
+}
+
+function escapeHTML(text) {
+  return text.replace(/[&<>"]/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;"
+  })[character]);
+}
+
+function generateWebsite() {
+  const idea = document.getElementById("idea").value.trim();
+
+  if (!idea) {
+    notify("Please describe your website idea first!");
+    return;
+  }
+
+  const button = document.getElementById("generate");
+  button.disabled = true;
+  button.textContent = "Creating your website...";
+
+  playSound(650);
+
+  setTimeout(() => {
+    website = buildWebsite(
+      idea,
+      document.getElementById("style").value
+    );
+
+    document.getElementById("preview").srcdoc = website.html;
+
+    button.disabled = false;
+    button.textContent = "✨ Generate Website";
+
+    showView("preview");
+    notify("Website created successfully!");
+    playSound(800);
+  }, 400);
+}
+
+function buildWebsite(idea, style) {
+  const themes = {
+    modern: ["#f5f7fb", "#17182c", "#635bff", "#ffffff"],
+    neon: ["#080b17", "#f6f3ff", "#9a6cff", "#151a2d"],
+    playful: ["#fff5fa", "#30203b", "#ff5999", "#ffffff"],
+    elegant: ["#141210", "#f5eadb", "#d2aa70", "#24201b"],
+    nature: ["#eef6ee", "#1b3326", "#37805b", "#ffffff"]
+  };
+
+  const [bg, fg, accent, card] = themes[style];
+
+  const lower = idea.toLowerCase();
+
+  let title = "Your Next Big Idea Starts Here";
+
+  if (lower.includes("portfolio")) title = "Ideas Made Visible.";
+  if (lower.includes("gaming")) title = "Enter Your Gaming Universe.";
+  if (lower.includes("shop") || lower.includes("store"))
+    title = "Discover Something Amazing.";
+  if (lower.includes("study")) title = "Make Every Day Count.";
+  if (lower.includes("restaurant")) title = "Taste Something Wonderful.";
+  if (lower.includes("ai")) title = "Build the Future.";
+
+  const description = escapeHTML(idea);
+
+  const sections = [
+    ["✦", "Beautiful Design",
+      "A polished experience created around your vision."],
+    ["◈", "Powerful Features",
+      "A flexible foundation ready for your next big idea."],
+    ["✧", "Made for You",
+      "Customize every detail and make it your own."]
+  ];
+
+  const cards = sections.map(section => `
+    <article class="card">
+      <div class="icon">${section[0]}</div>
+      <h3>${section[1]}</h3>
+      <p>${section[2]}</p>
+      <a href="#contact">Discover more ↗</a>
+    </article>
+  `).join("");
+
+  const css = `
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:${bg};color:${fg};
+font-family:Arial,sans-serif}
+nav{padding:24px 8%;display:flex;justify-content:space-between;
+align-items:center;border-bottom:1px solid #8883}
+nav strong{font-size:20px}
+nav a{color:${fg};text-decoration:none;margin-left:18px;font-size:13px}
+.hero{padding:100px 8%;animation:appear .8s ease}
+.tag{color:${accent};font-size:12px;font-weight:bold;letter-spacing:2px}
+h1{font-size:clamp(40px,8vw,78px);letter-spacing:-3px;
+line-height:1.05;max-width:850px;margin:20px 0}
+.hero p{max-width:650px;line-height:1.8;color:${fg};opacity:.75}
+.btn{display:inline-block;padding:15px 20px;background:${accent};
+color:white;border-radius:10px;text-decoration:none;margin-top:18px;
+transition:.25s}
+.btn:hover{transform:translateY(-4px)}
+section.content{padding:55px 8% 85px}
+h2{font-size:clamp(28px,4vw,42px)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:${card};padding:25px;border-radius:16px;
+border:1px solid #8883;transition:.3s}
+.card:hover{transform:translateY(-7px)}
+.icon{font-size:25px;color:${accent}}
+.card p{line-height:1.7;opacity:.7;font-size:14px}
+.card a{color:${accent};text-decoration:none;font-weight:bold;font-size:13px}
+.contact{margin:0 8% 60px;padding:40px 20px;text-align:center;
+background:${card};border-radius:18px}
+footer{text-align:center;padding:25px;opacity:.65}
+@keyframes appear{from{opacity:0;transform:translateY(20px)}
+to{opacity:1;transform:translateY(0)}}
+@media(max-width:650px){.grid{grid-template-columns:1fr}
+.hero{padding:65px 6%}section.content{padding:45px 6%}
+h1{letter-spacing:-1px}nav{padding:20px 6%}nav a{margin-left:8px}}
+`;
+
+  const js = `
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click',event=>{
+    const target=document.querySelector(link.getAttribute('href'));
+    if(target){
+      event.preventDefault();
+      target.scrollIntoView({behavior:'smooth'});
+    }
+  });
+});
+`;
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${escapeHTML(title)}</title>
+<style>${css}</style>
+</head>
+<body>
+<nav>
+<strong>✦ Infinity Studio</strong>
+<div><a href="#features">Features</a><a href="#about">About</a><a href="#contact">Contact</a></div>
+</nav>
+
+<header class="hero">
+<div class="tag">✦ YOUR VISION, YOUR WEBSITE</div>
+<h1>${escapeHTML(title)}</h1>
+<p>${description}</p>
+<a class="btn" href="#features">Explore the experience ↗</a>
+</header>
+
+<section class="content" id="features">
+<div class="tag">WHAT WE OFFER</div>
+<h2>Designed to inspire.</h2>
+<div class="grid">${cards}</div>
+</section>
+
+<section class="content" id="about">
+<div class="tag">OUR APPROACH</div>
+<h2>Simple. Beautiful. Yours.</h2>
+<p style="line-height:1.8;max-width:650px;opacity:.75">
+A beautiful digital experience starts with a clear idea.
+Personalize this website with your own images, content, and features.
+</p>
+</section>
+
+<section class="contact" id="contact">
+<div class="tag">LET'S GET STARTED</div>
+<h2>Make your idea real.</h2>
+<p>Every great project starts somewhere.</p>
+<a class="btn" href="mailto:hello@example.com">Contact us ↗</a>
+</section>
+
+<footer>Created with imagination ✦</footer>
+<script>${js}<\/script>
+</body>
+</html>`;
+
+  return { html, css, js };
+}
+
+function showView(view) {
+  currentView = view;
+
+  document.querySelectorAll(".toolbar button").forEach(button => {
+    button.classList.remove("active");
+  });
+
+  const tab = document.getElementById(
+    view === "preview" ? "previewTab" :
+    view === "html" ? "htmlTab" :
+    view === "css" ? "cssTab" : "jsTab"
+  );
+
+  if (tab) tab.classList.add("active");
+
+  document.getElementById("preview").style.display =
+    view === "preview" ? "block" : "none";
+
+  document.getElementById("code").style.display =
+    view === "preview" ? "none" : "block";
+
+  document.getElementById("code").textContent =
+    view === "preview" ? "" : website[view] || "";
+}
+
+async function copyCode() {
+  if (!website.html) {
+    notify("Generate a website first!");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(website.html);
+  } catch (error) {
+    const area = document.createElement("textarea");
+    area.value = website.html;
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand("copy");
+    area.remove();
+  }
+
+  notify("HTML copied!");
+  playSound(700);
+}
+
+function downloadCode() {
+  if (!website.html) {
+    notify("Generate a website first!");
+    return;
+  }
+
+  const blob = new Blob([website.html], {
+    type: "text/html;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "my-website.html";
+  link.click();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+  notify("Website downloaded!");
+  playSound(750);
+}
+</script>
+
+</body>
+</html>
